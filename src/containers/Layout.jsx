@@ -1,4 +1,5 @@
-import NavBar from 'components/NavBar';
+import Footer from 'components/molecules/Footer';
+import NavBar from 'components/molecules/NavBar';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -7,6 +8,7 @@ export default function Layout() {
     <div className='flex flex-col'>
       <NavBar />
       <Outlet />
+      <Footer />
     </div>
   );
 }

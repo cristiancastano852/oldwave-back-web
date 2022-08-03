@@ -8,7 +8,7 @@ module.exports = {
       lg: '1024px',
     },
     colors: {
-      'sky-blue': '#32D1F7',
+      'sky-blue': '#C7F3FD',
       'blue-beau': '#C5D3DD',
       'gh-white': '#F4F6FA',
       'light-grey': '#5C5E64',

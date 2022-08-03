@@ -1,0 +1,16 @@
+
+.footer-charac-container{
+    @apply flex flex-row space-x-2;
+}
+
+.footer-charac-container span{
+    @apply flex items-center; 
+}
+
+.footer-charac-container p{
+    @apply w-24; 
+}
+
+.icon{
+    @apply h-8 w-8 lg:w-10 lg:h-10;
+}

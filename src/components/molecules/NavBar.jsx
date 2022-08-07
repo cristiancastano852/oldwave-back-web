@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
 import { BsPersonCircle } from 'react-icons/bs';
 import { BiFilterAlt } from 'react-icons/bi';
@@ -6,6 +7,21 @@ import OldwaveLogo from 'assets/logos/oldwave-logo-horizontal.png';
 import CarritoIcon from 'assets/icons/carrito-icon.svg';
 
 export default function NavBar() {
+  const [value, setValue] = useState('');
+  const navigate = useNavigate();
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (value) {
+      // redirect to /search
+      navigate(`/search?query=${value}`);
+    }
+  };
+
   return (
     <nav>
       <section className='flex mx-5 mt-5 justify-between md:mx-20'>
@@ -48,16 +64,22 @@ export default function NavBar() {
           <div className='flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none'>
             <AiOutlineSearch className='w-5 h-5 mr-4 text-violet' />
           </div>
-          <input
-            type='text'
-            id='input-group-1'
-            className='bg-white text-gray-900 text-sm rounded-2xl w-full pl-10 p-2.5'
-            placeholder='Estoy buscando...'
-          />
+          <form onSubmit={handleSubmit}>
+            <input
+              type='text'
+              id='input-group-1'
+              value={value}
+              onChange={handleChange}
+              className='bg-white text-gray-900 text-sm rounded-2xl w-full pl-10 p-2.5'
+              placeholder='Estoy buscando...'
+              required
+            />
+          </form>
         </div>
         <button
           type='button'
           className='hidden text-white rounded-2xl border border-white py-2 px-8 lg:block'
+          onClick={handleSubmit}
         >
           Buscar
         </button>

@@ -6,90 +6,155 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model Enterprise {
-  id       String    @id @default(cuid())
-  name     String
-  projects Project[]
-  users    User[]
+model Country {
+  id            String    @id @default(cuid())
+  name          String
+  countryCode   String
+  departments   Department[]
 }
 
-model Project {
-  id                 String     @id @default(cuid())
-  name               String
-  description        String
-  clientEnterprise   Enterprise @relation(fields: [clientEnterpriseId], references: [id])
-  clientEnterpriseId String
-  issues             Issue[]
-  clients            User[]     @relation("ClientsProject")
-  developers         User[]     @relation("developerProject")
+model Department {
+  id                  String    @id @default(cuid())
+  name                String
+  departmentCountry   Country @relation(fields: [countryId], references: [id])
+  countryId           String
+  cities              City[]
 }
 
-model Issue {
-  id            String             @id @default(cuid())
-  description   String
-  category      Enum_IssueType
-  priority      Enum_IssuePriority
-  status        Enum_IssueStatus   @default(NotAssigned)
-  hourEstimate  Int?
-  dueDate       DateTime
-  closeDate     DateTime?
-  projectId     String
-  project       Project            @relation(fields: [projectId], references: [id])
-  IssueComments IssueComment[]
-  developerId   String?
-  developer     User?               @relation(fields: [developerId], references: [id])
-}
-
-enum Enum_IssueType {
-  MissingTask
-  Bug
-  Additional
-}
-
-enum Enum_IssuePriority {
-  Low
-  Medium
-  High
-}
-
-enum Enum_IssueStatus {
-  NotAssigned
-  Assigned
-  Estimated
-  InternalValidation
-  ClientValidation
-  Closed
-  Abandoned
+model City {
+  id                    String    @id @default(cuid())
+  name                  String
+  cityDepartment        Department @relation(fields: [departmentId], references: [id])
+  departmentId          String
+  users                 User[]
+  addresses             Address[]
+  sellercities          Seller[]
+  
 }
 
 model User {
-  id                String         @id @default(cuid())
-  email             String         @unique
-  enterpriseId      String?
-  enterprise        Enterprise?    @relation(fields: [enterpriseId], references: [id])
-  role              Enum_Role
-  comments          IssueComment[]
-  clientProjects    Project[]      @relation("ClientsProject")
-  developerProjects Project[]      @relation("developerProject")
-  Issues            Issue[]
-
+  id                 String     @id @default(cuid())
+  userCity           City       @relation(fields: [cityId], references: [id])
+  cityId             String
+  name               String
+  lastName           String
+  documentType       String
+  documentId         String
+  dateOfBirth        DateTime
+  email              String
+  gender             String
+  phoneNumber        String
+  clients            Client[]
+  sellers            Seller[]
 }
 
-enum Enum_Role {
-  Administrador
-  Desarrollador
-  Cliente
+model Address {
+  id                String    @id @default(cuid())
+  addressCity       City      @relation(fields: [cityId], references: [id])
+  cityId            String
+  addressLine       String
+  additionalInfo    String
+  clientAddresses   Client[]
+  orders            Order[]
 }
 
-model IssueComment {
-  id          String @id @default(cuid())
-  comment     String
-  createdById String
-  createdBy   User   @relation(fields: [createdById], references: [id])
-  issueId     String
-  issue       Issue  @relation(fields: [issueId], references: [id])
+model Client {
+  id                String    @id @default(cuid())
+  clientAddress     Address    @relation(fields: [addressId], references: [id])
+  addressId         String
+  clientUser        User      @relation(fields: [userId], references: [id])
+  userId            String
+  orders            Order[]
+  ratings           Rating[]
 }
+
+model Seller {
+  id                String    @id @default(cuid())
+  sellerUser        User      @relation(fields: [clientId], references: [id])
+  clientId          String
+  sellerName        String
+  logo              String
+  addressCity       City      @relation(fields: [cityId], references: [id])
+  cityId            String
+  phoneNumber       String
+  sellerEmail       String
+  products          Product[]
+}
+
+model Category {
+  id            String    @id @default(cuid())
+  name          String
+  categories    CategoryProduct[]
+}
+
+model Product {
+  id                String    @id @default(cuid())
+  productSeller     Seller    @relation(fields: [sellerId], references: [id])
+  sellerId          String
+  name              String
+  brand             String
+  value             Decimal
+  description       String
+  stock             Int
+  categories        CategoryProduct[]
+  images            Image[]
+  details           OrderDetail[]
+  ratings           Rating[]
+}
+
+model CategoryProduct {
+  id                  String    @id @default(cuid())
+  categoryCategory    Category  @relation(fields: [categoryId], references: [id])
+  categoryId          String
+  categoryProduct     Product  @relation(fields: [productId], references: [id])
+  productId           String
+}
+
+model Image {
+  id               String    @id @default(cuid())
+  imageProduct     Product  @relation(fields: [productId], references: [id])
+  productId        String
+  url              String
+  main             Boolean
+}
+
+model Order {
+  id                  String    @id @default(cuid())
+  orderClient         Client    @relation(fields: [clientId], references: [id])
+  clientId            String
+  orderAddress        Address   @relation(fields: [addressId], references: [id])
+  addressId           String
+  invoiceAddress      String
+  shipmentDate        String
+  paymentMethod       String
+  deliveryStatus      String
+  total               Decimal
+  trackNumber         String
+  details             OrderDetail[]
+}
+
+model OrderDetail {
+  id                  String    @id @default(cuid())
+  detailOrder         Order     @relation(fields: [orderId], references: [id])
+  orderId             String
+  orderProduct        Product   @relation(fields: [productId], references: [id])
+  productId           String
+  value               Decimal
+  units               Int
+  subTotal            Decimal
+}
+
+model Rating {
+  id                  String    @id @default(cuid())
+  ratingProduct       Product   @relation(fields: [productId], references: [id])
+  productId           String
+  ratingClient        Client    @relation(fields: [clientId], references: [id])
+  clientId            String
+  rate                Int
+  comment             String
+}
+

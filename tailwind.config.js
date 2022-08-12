@@ -8,6 +8,9 @@ module.exports = {
         md: '768px',
         lg: '1024px',
       },
+      spacing: {
+        90: '22.5rem',
+      },
       colors: {
         'sky-blue': '#C7F3FD',
         'blue-beau': '#C5D3DD',

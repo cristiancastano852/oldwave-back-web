@@ -1,9 +1,11 @@
 import axios from 'axios';
-import Item from 'components/atoms/Item';
 import React, { useEffect, useState } from 'react';
 import { AiFillStar } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
 export default function ItemList({ query }) {
+  const navigate = useNavigate();
+
   const [items, setItems] = useState([]);
   const [item, setItem] = useState([]);
   const [itemSelected, setItemSelected] = useState(false);
@@ -23,6 +25,7 @@ export default function ItemList({ query }) {
         setItem(item2);
         setItemSelected(true); // bool which indicate when a item was clicked
       }}
+      key={item2.id}
       aria-hidden='true'
     >
       <img className='w-48 h-48' src={item2.thumbnail} alt={item2.title} />
@@ -44,7 +47,7 @@ export default function ItemList({ query }) {
       </div>
       <div className='flex flex-row justify-between text-xxs px-4'>
         <h4 className='w-1/2'>{item2.address.city_name}</h4>
-        <h4>{item2.seller.id}</h4>
+        <h4>{item2.seller_id}</h4>
       </div>
       <div className='flex w-full justify-center'>
         <button
@@ -59,20 +62,13 @@ export default function ItemList({ query }) {
 
   const getInfo = () => {
     if (itemSelected) {
-      return (
-        <Item
-          itemToCreate={item}
-          onReturn={() => {
-            setItemSelected(false);
-            setItem([]);
-          }}
-        />
-      );
+      navigate(`/item/${item.id}`);
+      return null;
     }
     return (
-      <section className='flex flex-col w-full items-center'>
+      <section className='flex flex-col w-full items-center my-4'>
         <h1> {`${items.length} Resultados`}</h1>
-        <section className='flex flex-row flex-wrap w-full items-center justify-center py-3 gap-4 md:gap-6'>
+        <section className='flex flex-row flex-wrap w-full items-center justify-center gap-5 md:gap-7'>
           {componentItems}
         </section>
       </section>

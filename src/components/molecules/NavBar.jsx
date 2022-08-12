@@ -11,6 +11,7 @@ export default function NavBar() {
   const navigate = useNavigate();
 
   const handleChange = (event) => {
+    event.preventDefault();
     setValue(event.target.value);
   };
 
@@ -20,6 +21,11 @@ export default function NavBar() {
       // redirect to /search
       navigate(`/search?query=${value}`);
     }
+  };
+
+  const handleHomeCLick = (event) => {
+    event.preventDefault();
+    navigate('/');
   };
 
   return (
@@ -34,6 +40,8 @@ export default function NavBar() {
               src={OldwaveLogo}
               alt='logo de oldwave'
               className='h-8 w-32 md:9 md:36'
+              onClick={handleHomeCLick}
+              aria-hidden='true'
             />
           </span>
         </div>

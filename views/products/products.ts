@@ -88,4 +88,42 @@ routeProducts.get("/products", async (req, res) => {
   });
 });
 
+routeProducts.get("/products/:id", async (req, res) => {
+  const id: string = req.params.id as string;
+  const getDetails = await prisma.product.findUnique({
+    where: {
+      id: id,
+    },
+    select: {
+      name: true,
+      brand: true,
+      value: true,
+      description: true,
+      productSeller: {
+        select: {
+          sellerName: true,
+          addressCity: {
+          logo: true,
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+      images: {
+          url: true,
+        select: {
+        },
+      },
+      ratings: {
+          rate: true,
+        select: {
+        },
+      },
+    },
+  })
+  
+  res.json(getDetails);
+});
+
 export default routeProducts;

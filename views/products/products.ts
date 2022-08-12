@@ -7,8 +7,14 @@ const routeProducts = express.Router();
 
 routeProducts.get("/products", async (req, res) => {
   const search: string = req.query.search as string;
-  const results: number = req.query.results && req.query.results != '' ? Number(req.query.results as string): 10;
-  const offset: number = req.query.offset && req.query.offset != '' ? Number(req.query.offset as string): 0;
+  const results: number =
+    req.query.results && req.query.results != ""
+      ? Number(req.query.results as string)
+      : 10;
+  const offset: number =
+    req.query.offset && req.query.offset != ""
+      ? Number(req.query.offset as string)
+      : 0;
   const searchQuery = search
     ? {
         name: {
@@ -80,50 +86,54 @@ routeProducts.get("/products", async (req, res) => {
   });
   res.json({
     paging: {
-      total:altProducts[0],
+      total: altProducts[0],
       offset,
       results,
     },
     products: altProducts[1],
   });
-});
 
-routeProducts.get("/products/:id", async (req, res) => {
-  const id: string = req.params.id as string;
-  const getDetails = await prisma.product.findUnique({
-    where: {
-      id: id,
-    },
-    select: {
-      name: true,
-      brand: true,
-      value: true,
-      description: true,
-      productSeller: {
-        select: {
-          sellerName: true,
-          addressCity: {
-          logo: true,
-            select: {
-              name: true,
+  routeProducts.get("/products/:id", async (req, res) => {
+    const id: string = req.params.id as string;
+    let getDetails = await prisma.product.findUnique({
+      where: {
+        id: id,
+      },
+      select: {
+        name: true,
+        brand: true,
+        value: true,
+        description: true,
+        productSeller: {
+          select: {
+            sellerName: true,
+            logo: true,
+            addressCity: {
+              select: {
+                name: true,
+              },
             },
           },
         },
-      },
-      images: {
-          url: true,
-        select: {
+        images: {
+          select: { url: true },
+        },
+        ratings: {
+          select: { rate: true },
         },
       },
-      ratings: {
-          rate: true,
-        select: {
-        },
-      },
-    },
-  })
-  
-  res.json(getDetails);
+    });
+    getDetails = {
+      ...getDetails,
+      rating: getDetails
+        ? getDetails.ratings.reduce(
+            (acc: number, curr: { rate: number }) => acc + curr.rate,
+            0
+          ) / getDetails.ratings.length
+        : undefined,
+    } as any;
+    res.json(getDetails);
+  });
 });
 
 export default routeProducts;

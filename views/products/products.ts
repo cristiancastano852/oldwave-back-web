@@ -7,6 +7,8 @@ const routeProducts = express.Router();
 
 routeProducts.get("/products", async (req, res) => {
   const search: string = req.query.search as string;
+  const results: number = req.query.results && req.query.results != '' ? Number(req.query.results as string): 10;
+  const offset: number = req.query.offset && req.query.offset != '' ? Number(req.query.offset as string): 0;
   const searchQuery = search
     ? {
         name: {
@@ -60,6 +62,8 @@ routeProducts.get("/products", async (req, res) => {
         },
         value: true,
       },
+      skip: offset,
+      take: results,
     }),
   ]);
   const products = altProducts[1];
@@ -74,7 +78,11 @@ routeProducts.get("/products", async (req, res) => {
     product.ratings = undefined;
   });
   res.json({
-    count: altProducts[0],
+    paging: {
+      total:altProducts[0],
+      offset,
+      results,
+    },
     products: altProducts[1],
   });
 });

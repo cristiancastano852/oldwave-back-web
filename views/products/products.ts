@@ -35,6 +35,7 @@ routeProducts.get("/products", async (req, res) => {
         ...searchQuery,
       },
       select: {
+        id: true,
         name: true,
         brand: true,
         productSeller: {

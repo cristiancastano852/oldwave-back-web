@@ -19,7 +19,7 @@ export default function Home() {
       <div className='flex snap-x w-full px-5 overflow-x-auto items-center justify-start md:justify-center gap-16 h-48'>
         <Category image={carroIcon} cate='Carros' />
         <Category image={motoIcon} cate='Motos' />
-        
+
         <Category image={ropaIcon} cate='Ropa' />
         <Category image={deporteIcon} cate='Deporte' />
         <Category image={muebleIcon} cate='Muebles' />

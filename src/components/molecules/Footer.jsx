@@ -8,7 +8,7 @@ import AllCountryShipments from 'assets/icons/icon-envios-todo-elpais.svg';
 export default function Footer() {
   return (
     <footer>
-      <section className='flex flex-row h-36 space-y-1 w-screen flex-wrap items-center justify-center bg-sky-blue text-violet text-sm md:justify-between md:px-4 md:text-base lg:px-16'>
+      <section className='flex flex-row h-36 space-y-1 w-full flex-wrap items-center justify-center bg-sky-blue text-violet text-sm md:justify-between md:px-4 md:text-base lg:px-16'>
         <div className='footer-charac-container'>
           <span>
             <img src={SecPurchase} alt='icon' className='icon' />

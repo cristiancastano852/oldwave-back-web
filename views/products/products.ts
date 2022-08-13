@@ -17,10 +17,10 @@ routeProducts.get("/products", async (req, res) => {
       : 0;
   const searchQuery = search
     ? [
-      {name: {contains: search}},
-      {brand: {contains: search}},
-      {productSeller: {sellerName: {contains: search}}},
-    ]
+        { name: { contains: search } },
+        { brand: { contains: search } },
+        { productSeller: { sellerName: { contains: search } } },
+      ]
     : [];
   const altProducts = await prisma.$transaction([
     prisma.product.count({
@@ -109,7 +109,10 @@ routeProducts.get("/products", async (req, res) => {
           },
         },
         images: {
-          select: { url: true },
+          select: {
+            main: true,
+            url: true,
+          },
         },
         ratings: {
           select: { rate: true },

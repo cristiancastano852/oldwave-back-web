@@ -16,29 +16,21 @@ routeProducts.get("/products", async (req, res) => {
       ? Number(req.query.offset as string)
       : 0;
   const searchQuery = search
-    ? {
-        name: {
-          contains: search,
-        },
-        brand: {
-          contains: search,
-        },
-        productSeller: {
-          sellerName: {
-            contains: search,
-          },
-        },
-      }
-    : {};
+    ? [
+      {name: {contains: search}},
+      {brand: {contains: search}},
+      {productSeller: {sellerName: {contains: search}}},
+    ]
+    : [];
   const altProducts = await prisma.$transaction([
     prisma.product.count({
       where: {
-        ...searchQuery,
+        OR: searchQuery,
       },
     }),
     prisma.product.findMany({
       where: {
-        ...searchQuery,
+        OR: searchQuery,
       },
       select: {
         id: true,
@@ -68,6 +60,7 @@ routeProducts.get("/products", async (req, res) => {
           },
         },
         value: true,
+        thumbnail: true,
       },
       skip: offset,
       take: results,

@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node index.ts"
+    "dev": "ts-node index.ts",
+    "start": "ts-node index.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.1.1",

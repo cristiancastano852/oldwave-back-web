@@ -7,6 +7,7 @@ import { AiFillStar } from 'react-icons/ai';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'styles/item.css';
+import { nanoid } from 'nanoid';
 
 export default function Item() {
   const [itemToShow, setItemToShow] = useState([]);
@@ -22,8 +23,8 @@ export default function Item() {
       });
   }, [itemId]);
 
-  const itemImages = pictures.map((itemImg, idx) => (
-    <SwiperSlide className='swiper-slide' key={idx.id}>
+  const itemImages = pictures.map((itemImg) => (
+    <SwiperSlide className='swiper-slide' key={nanoid()}>
       <img
         src={itemImg.url}
         alt=''

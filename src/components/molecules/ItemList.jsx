@@ -56,19 +56,24 @@ export default function ItemList({ query }) {
     </section>
   ));
 
-  const getInfo = () => {
+  useEffect(() => {
     if (itemSelected) {
       navigate(`/item/${item.id}`);
-      return null;
     }
-    return (
-      <section className='flex flex-col w-full items-center my-4'>
-        <h1> {`${items.length} Resultados`}</h1>
-        <section className='flex flex-row flex-wrap w-full items-center justify-center gap-5 md:gap-7'>
-          {componentItems}
+  }, [itemSelected]);
+
+  const getInfo = () => {
+    if (!itemSelected) {
+      return (
+        <section className='flex flex-col w-full items-center my-4'>
+          <h1 className='text-lg mb-5'> {`${items.length} Resultados`}</h1>
+          <section className='flex flex-row flex-wrap w-full items-center justify-center gap-5 md:gap-7'>
+            {componentItems}
+          </section>
         </section>
-      </section>
-    );
+      );
+    }
+    return null;
   };
 
   return <>{getInfo()}</>;

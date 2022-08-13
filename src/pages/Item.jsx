@@ -11,21 +11,14 @@ import 'styles/item.css';
 export default function Item() {
   const [itemToShow, setItemToShow] = useState([]);
   const [pictures, setPictures] = useState([]);
-  const [itemDesc, setItemDesc] = useState('');
   const { itemId } = useParams();
 
   useEffect(() => {
     axios
-      .get(`https://api.mercadolibre.com/items/${itemId}`)
+      .get(`https://asac-back-dev.azurewebsites.net/products/${itemId}`)
       .then(({ data }) => {
         setItemToShow(data);
-        setPictures(data.pictures);
-      });
-
-    axios
-      .get(`https://api.mercadolibre.com/items/${itemId}/description`)
-      .then(({ data }) => {
-        setItemDesc(data.plain_text);
+        setPictures(data.images);
       });
   }, [itemId]);
 
@@ -53,27 +46,23 @@ export default function Item() {
             </Swiper>
           </div>
           <h3 className='text-center text-sm font-medium px-3 pt-3 md:text-base'>
-            {itemToShow.title}
+            {itemToShow.name}
           </h3>
-          <h4 className='text-center text-xxs font-medium text-violet pt-1 px-3 md:text-xs'>
-            {itemToShow.condition}
-            {/* Item2.condition shoulbe changed for brand in oldwave api */}
-          </h4>
           <div className='flex flex-row w-2/3 items-center justify-between px-5 md:w-1/3'>
-            <h4 className='font-bold text-sm text-violet md:text-base'>{`$ ${itemToShow.price}`}</h4>
+            <h4 className='font-bold text-sm text-violet md:text-base'>{`$ ${itemToShow.value}`}</h4>
             <div className='flex flex-row items-center'>
               <span>
                 <AiFillStar className='h-6 w-6 text-violet pr-1' />
               </span>
-              <h4 className='text-sm md:text-base'>4.6</h4>
+              <h4 className='text-sm md:text-base'>{itemToShow.rating}</h4>
             </div>
           </div>
           <div className='flex flex-row w-2/3 items-center justify-between px-5 text-xxs md:text xs md:w-1/3'>
-            <h4>{itemToShow.seller_address?.city?.name}</h4>
-            <h4>{itemToShow.seller_id}</h4>
+            <h4>{itemToShow.productSeller?.addressCity?.name}</h4>
+            <h4>{itemToShow.productSeller?.sellerName}</h4>
           </div>
           <p className='w-2/3 text-center mt-1 px-2 text-xxs md:text-xs'>
-            {itemDesc}
+            {itemToShow.description}
           </p>
         </section>
       );

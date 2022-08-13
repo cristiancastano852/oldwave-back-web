@@ -12,9 +12,9 @@ export default function ItemList({ query }) {
 
   useEffect(() => {
     axios
-      .get(`https://api.mercadolibre.com/sites/MCO/search?&q=${query}`)
+      .get(`https://asac-back-dev.azurewebsites.net/products?search=${query}`)
       .then(({ data }) => {
-        setItems(data.results);
+        setItems(data.products);
       });
   }, [query]);
 
@@ -28,26 +28,22 @@ export default function ItemList({ query }) {
       key={item2.id}
       aria-hidden='true'
     >
-      <img className='w-48 h-48' src={item2.thumbnail} alt={item2.title} />
+      <img className='w-48 h-48' src={item2.thumbnail} alt={item2.name} />
       <h3 className='text-center text-sm font-medium px-3 pt-1'>
-        {item2.title}
+        {item2.name}
       </h3>
-      <h4 className='text-center text-xxs font-medium text-violet px-3'>
-        {item2.condition}
-        {/* Item2.condition shoulbe changed for brand in oldwave api */}
-      </h4>
       <div className='flex flex-row justify-between items-center px-5'>
-        <h4 className='font-bold text-sm text-violet'>{`$ ${item2.price}`}</h4>
+        <h4 className='font-bold text-sm text-violet'>{`$ ${item2.value}`}</h4>
         <div className='flex flex-row items-center'>
           <span>
             <AiFillStar className='h-6 w-6 text-violet pr-1' />
           </span>
-          <h4 className='text-sm'>4.6</h4>
+          <h4 className='text-sm'>{item2.rating}</h4>
         </div>
       </div>
       <div className='flex flex-row justify-between text-xxs px-4'>
-        <h4 className='w-1/2'>{item2.address.city_name}</h4>
-        <h4>{item2.seller_id}</h4>
+        <h4 className='w-1/2'>{item2.productSeller.addressCity.name}</h4>
+        <h4>{item2.seller}</h4>
       </div>
       <div className='flex w-full justify-center'>
         <button

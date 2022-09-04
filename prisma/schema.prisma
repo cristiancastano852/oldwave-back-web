@@ -47,8 +47,16 @@ model User {
   email        String
   gender       String
   phoneNumber  String
-  clients      Client[]
-  sellers      Seller[]
+  client      Client?
+  seller      Seller?
+  roleUser     Role?
+}
+
+model Role{
+  id          String   @id @default(cuid())
+  roleUser    User     @relation(fields: [userId], references: [id])
+  userId      String   @unique
+  isAdmin     Boolean
 }
 
 model Address {
@@ -66,15 +74,16 @@ model Client {
   clientAddress Address  @relation(fields: [addressId], references: [id])
   addressId     String
   clientUser    User     @relation(fields: [userId], references: [id])
-  userId        String
+  userId        String   @unique
   orders        Order[]
+  shoppingCart  ShoppingCart?
   ratings       Rating[]
 }
 
 model Seller {
   id          String    @id @default(cuid())
   sellerUser  User      @relation(fields: [clientId], references: [id])
-  clientId    String
+  clientId    String    @unique
   sellerName  String
   logo        String
   addressCity City      @relation(fields: [cityId], references: [id])
@@ -103,6 +112,7 @@ model Product {
   images        Image[]
   details       OrderDetail[]
   ratings       Rating[]
+  cartDetails    ShoppingCartDetails[]
   thumbnail     String            @default("")
 }
 
@@ -146,6 +156,25 @@ model OrderDetail {
   value        Decimal
   units        Int
   subTotal     Decimal
+}
+
+model ShoppingCart {
+  id             String        @id @default(cuid())
+  cartClient     Client        @relation(fields: [clientId], references: [id])
+  clientId       String        @unique
+  total          Decimal
+  details        ShoppingCartDetails[]
+}
+
+model ShoppingCartDetails {
+  id                String  @id @default(cuid())
+  detailcart        ShoppingCart   @relation(fields: [shoppingCartId], references: [id])
+  shoppingCartId    String
+  cartProduct       Product @relation(fields: [productId], references: [id])
+  productId         String
+  value             Decimal
+  units             Int
+  subTotal          Decimal
 }
 
 model Rating {

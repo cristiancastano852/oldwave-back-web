@@ -74,7 +74,7 @@ routeAdmin.patch("/admin/:id", async (req, res) => {
                 res.json({message:"you are not admin"})
             }
         } else {
-            res.status(404).json({ message: "Not Found admin" });
+            res.status(404).json({ message: "Not Found" });
         }
     }catch(err){
         res.status(500).json({

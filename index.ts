@@ -1,13 +1,15 @@
 import express from 'express'
 import routeProducts from './views/products/products'
+import routeRole from './views/role/role'
+import routeShoppingCart from './views/shoppingCart/shopingCart'
 
 const app = express()
 
 const port=process.env.PORT || 4000
 app.use(express.json())
 app.use(routeProducts)
-
-
+app.use(routeShoppingCart)
+app.use(routeRole)
 const server = app.listen(port, () =>
   console.log(`
 🚀 Server ready at: ${port}`),

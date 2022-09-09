@@ -13,7 +13,7 @@ routeShoppingCart.get("/cart/:id", async (req, res) => {
         id: id,
       },
       select: {
-        clients: {
+        client: {
           select: {
             shoppingCart: {
               select: {
@@ -41,29 +41,31 @@ routeShoppingCart.get("/cart/:id", async (req, res) => {
     res.json(getDetails);
 });
 
-routeShoppingCart.get("/cart/:id", async (req, res) => {
+routeShoppingCart.delete('/cart/:id', async (req, res) => {
   const id: string = req.params.id as string;
-  let getDetails = await prisma.shoppingCart.findUnique({
+  const product = await prisma.shoppingCartDetails.delete({
     where: {
-      clientId: id,
+      id: id,
     },
-    select: {
-      total: true,
-      details: {
-        select: {
-          id: true,
-          units: true,
-          cartProduct: {
-              name: true,
-              stock: true,
-              thumbnail: true,
-              value: true,
-          },
-        },
-      },
+  })
+  res.json(product)
+})
+
+/*routeShoppingCart.post('/post', async (req, res) => {
+  const { shoppingCartId, productId, units } = req.body
+  const post = await prisma.shoppingCartDetails.create({
+    data: {
+      product: {connect: {id: productId }},
+      shoppingCart: {connect: {id: shoppingCartId }},
+      productId: productId,
+      units: units,
+
+
     },
   });
-  res.json(getDetails);
-});
+  
+  res.json(post)
+})*/
+
 
 export default routeShoppingCart;

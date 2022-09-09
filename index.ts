@@ -1,6 +1,7 @@
 import express from 'express'
 import routeProducts from './views/products/products'
 import routeAdmin from './views/admin/admin'
+import routeProductRating from './views/rating/rating'
 
 const app = express()
 
@@ -8,6 +9,7 @@ const port=process.env.PORT || 4000
 app.use(express.json())
 app.use(routeProducts)
 app.use(routeAdmin)
+app.use(routeProductRating)
 
 
 const server = app.listen(port, () =>

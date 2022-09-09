@@ -48,24 +48,23 @@ routeShoppingCart.delete('/cart/:id', async (req, res) => {
       id: id,
     },
   })
-  res.json(product)
+  res.json('se eliminó correctamente')
 })
 
-/*routeShoppingCart.post('/post', async (req, res) => {
-  const { shoppingCartId, productId, units } = req.body
+routeShoppingCart.post('/cart', async (req, res) => {
+  const { shoppingCartId, productId, value, units, subTotal } = req.body
   const post = await prisma.shoppingCartDetails.create({
     data: {
-      product: {connect: {id: productId }},
-      shoppingCart: {connect: {id: shoppingCartId }},
-      productId: productId,
-      units: units,
-
-
+      shoppingCartId : shoppingCartId,
+      productId : productId,
+      value : value,
+      units : units,
+      subTotal : subTotal
     },
   });
   
   res.json(post)
-})*/
+})
 
 
 export default routeShoppingCart;

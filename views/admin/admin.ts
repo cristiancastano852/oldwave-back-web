@@ -17,9 +17,7 @@ routeAdmin.post("/admin/:id", async (req, res) => {
         },
     });
     if (role !== null) {
-        console.log('entro !null');
         if (role.isAdmin) {
-            console.log('entro isAdmin');
             const { sellerId, name, brand, stock, value, thumbnail, description } = req.body;
             const product = await prisma.product.create({
                 data: {

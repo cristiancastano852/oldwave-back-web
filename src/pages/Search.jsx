@@ -1,6 +1,6 @@
-import ItemList from 'components/molecules/ItemList';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import ItemList from 'components/organism/ItemList';
 
 function useQuery() {
   const { search } = useLocation();

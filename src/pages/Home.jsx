@@ -7,7 +7,7 @@ import deporteIcon from 'assets/icons/icon-deporte.svg';
 import muebleIcon from 'assets/icons/icon-mueble.svg';
 import computadorIcon from 'assets/icons/icon-computadores.svg';
 import celularIcon from 'assets/icons/icon-celular.svg';
-import { Category } from 'components/molecules/Category';
+import { Category } from 'components/atoms/Category';
 
 export default function Home() {
   return (
@@ -19,7 +19,6 @@ export default function Home() {
       <div className='flex snap-x w-full px-5 overflow-x-auto items-center justify-start md:justify-center gap-16 h-48'>
         <Category image={carroIcon} cate='Carros' />
         <Category image={motoIcon} cate='Motos' />
-
         <Category image={ropaIcon} cate='Ropa' />
         <Category image={deporteIcon} cate='Deporte' />
         <Category image={muebleIcon} cate='Muebles' />

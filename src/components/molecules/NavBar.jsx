@@ -5,8 +5,12 @@ import { BsPersonCircle } from 'react-icons/bs';
 import { BiFilterAlt } from 'react-icons/bi';
 import OldwaveLogo from 'assets/logos/oldwave-logo-horizontal.png';
 import CarritoIcon from 'assets/icons/carrito-icon.svg';
+import LoginButton from 'components/atoms/LoginButton';
+import { useAuth0 } from '@auth0/auth0-react';
+import LogOutButton from 'components/atoms/LogOutButton';
 
 export default function NavBar() {
+  const { isAuthenticated } = useAuth0();
   const [value, setValue] = useState('');
   const navigate = useNavigate();
 
@@ -46,12 +50,7 @@ export default function NavBar() {
           </span>
         </div>
         <div className='flex flex-row items-center'>
-          <button
-            type='button'
-            className='py-2 px-7 bg-gh-white rounded-2xl hidden lg:block'
-          >
-            Registrarse o iniciar sesión
-          </button>
+          {isAuthenticated ? <LogOutButton /> : <LoginButton />}
           <span>
             <BsPersonCircle
               alt='login and profile icon'

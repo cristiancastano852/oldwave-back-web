@@ -1,5 +1,5 @@
 import React from 'react';
-import bannerImg from 'assets/icons/banner-blackfriday.png';
+import bannerImg from 'assets/banner-blackfriday.png';
 import carroIcon from 'assets/icons/icon-carro.svg';
 import motoIcon from 'assets/icons/icon-moto.svg';
 import ropaIcon from 'assets/icons/icon-ropa.svg';

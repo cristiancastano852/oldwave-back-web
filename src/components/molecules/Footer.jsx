@@ -4,6 +4,9 @@ import SecPurchase from 'assets/icons/icon-compras-seguras.svg';
 import SeveralPayments from 'assets/icons/icon-multiples-medios-pago.svg';
 import QA from 'assets/icons/icon-calidad-garantizada.svg';
 import AllCountryShipments from 'assets/icons/icon-envios-todo-elpais.svg';
+import OldwaveLogoVer from 'assets/logos/oldwave-logo-vertical.png';
+import ButtonAndIcon from 'components/atoms/ButtonAndIcon';
+import { FaFacebookF, FaInstagram } from 'react-icons/fa';
 
 export default function Footer() {
   return (
@@ -60,6 +63,48 @@ export default function Footer() {
             su política de datos
           </p>
         </section>
+      </section>
+      <section>
+        <section className='flex flex-col mt-4 px-10 space-y-5 justify-between md:flex-row'>
+          <picture className='hidden w-32 h-28 md:block'>
+            <img src={OldwaveLogoVer} alt='Logo vertical de Oldwave' />
+          </picture>
+          <div className='flex flex-col'>
+            <h3 className='footer-section-title'>oldwave</h3>
+            <a href='/'>¿Quienes Somos?</a>
+            <a href='/'>Nuestras tiendas</a>
+          </div>
+          <div className='flex flex-col'>
+            <h3 className='footer-section-title'>Links de interés</h3>
+            <a href='/'>Preguntas frecuentes</a>
+            <a href='/'>Términos y condiciones</a>
+            <a href='/'>Políticas de devoluciones</a>
+          </div>
+          <section>
+            <div>
+              <h3 className='footer-section-title'>Contacto</h3>
+              <span>servicioalcliente@oldwave.co</span>
+              <br />
+              <span>Teléfono: 3161924</span>
+            </div>
+            <div className='mt-5'>
+              <h3 className='footer-section-title'>Redes sociales</h3>
+              <div className='flex flex-row space-x-3 mt-3'>
+                <ButtonAndIcon
+                  icon={<FaFacebookF className='h-6 w-6 text-white' />}
+                  otherStyles='bg-violet rounded-full md:space-x-0'
+                />
+                <ButtonAndIcon
+                  icon={<FaInstagram className='h-6 w-6 text-white' />}
+                  otherStyles='bg-violet rounded-full md:space-x-0'
+                />
+              </div>
+            </div>
+          </section>
+        </section>
+        <div className='text-center mt-10'>
+          <span>oldwave © 2022 | Desarrollado por: ASAC</span>
+        </div>
       </section>
     </footer>
   );

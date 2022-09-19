@@ -14,3 +14,15 @@
 .icon{
     @apply h-8 w-8 lg:w-10 lg:h-10;
 }
+
+.footer-section-title{
+    @apply text-violet font-bold text-xl;
+}
+
+a{
+    @apply text-footer-gray text-sm font-medium;
+}
+
+span{
+    @apply text-footer-gray text-sm font-medium;
+}

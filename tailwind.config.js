@@ -17,6 +17,7 @@ module.exports = {
         'gh-white': '#F4F6FA',
         'cult-white': '#F7F7F7',
         'light-grey': '#5C5E64',
+        'footer-gray': '#3B3B3B',
         platinium: '#E2E2E2',
         violet: '#772CE8',
         orange: '#F99C36',

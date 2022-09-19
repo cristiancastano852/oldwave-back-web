@@ -95,7 +95,7 @@ export default function NavBar() {
           className='flex flex-row items-center space-x-1 hidden text-white rounded-2xl border border-white py-2 px-5 lg:block'
         >
           <BiFilterAlt className='inline' />
-          <span>Filtros</span>
+          <span className='text-white'>Filtros</span>
         </button>
       </section>
     </nav>

@@ -9,34 +9,57 @@ export default function ItemCard({
   city,
   stars,
   seller,
+  brand = 'Lujo',
 }) {
+  // Formato del precio del producto
+  const formatterPeso = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0,
+  });
+
   return (
     <section
-      className='flex flex-col w-48 h-96 bg-cult-white rounded border border-platinium'
+      className='relative flex flex-col w-48 h-96 bg-cult-white rounded-lg border border-platinium'
       onClick={onReturn}
       aria-hidden='true'
     >
       <img className='w-48 h-48' src={img} alt={name} />
-      <h3 className='text-center text-sm font-medium px-3 pt-1'>{name}</h3>
-      <div className='flex flex-row justify-between items-center px-5'>
-        <h4 className='font-bold text-sm text-violet'>{`$ ${price}`}</h4>
-        <div className='flex flex-row items-center'>
-          <span>
-            <AiFillStar className='h-6 w-6 text-violet pr-1' />
-          </span>
-          <h4 className='text-sm'>{stars}</h4>
+      <div className='flex flex-col items-center justify-center w-full h-1/5'>
+        <h3 className='text-center text-sm font-medium px-3 pt-1 break-words'>
+          {name.length > 60 ? `${name.substring(0, 60)}...` : name}
+        </h3>
+        {/* TO-DO brand field is by deafult, change to db text */}
+        <h4 className='text-center text-violet text-xs font-medium px-3 pt-3'>
+          {brand}
+        </h4>
+      </div>
+      <section className='flex w-full flex-col absolute bottom-14'>
+        <div className='flex flex-row justify-between items-center px-5'>
+          <h4 className='font-bold text-sm text-violet'>
+            {formatterPeso.format(price)}
+          </h4>
+          <div className='flex flex-row items-center'>
+            <span>
+              <AiFillStar className='h-6 w-6 text-violet pr-1' />
+            </span>
+            <h4 className='text-sm'>{stars}</h4>
+          </div>
         </div>
-      </div>
-      <div className='flex flex-row justify-between text-xxs px-4'>
-        <h4 className='w-1/2'>{city}</h4>
-        <h4>{seller}</h4>
-      </div>
-      <div className='flex w-full justify-center'>
-        <button
-          className='w-4/5 bg-violet mt-2 py-1 rounded-2xl text-white text-bold text-xxs'
-          type='button'
-        >
-          Agregar al carrito
+        <section className='flex flex-row justify-between text-xxs px-4 gap-2'>
+          <div className='w-1/2'>
+            <p className='break-words'>{city}</p>
+          </div>
+          <div className='w-1/2'>
+            <p className='text-right break-words'>{seller}</p>
+          </div>
+        </section>
+      </section>
+      <div className='flex absolute bottom-3 w-full justify-center items-center mt-2'>
+        <button className='w-4/5 bg-violet pb-1 rounded-2xl' type='button'>
+          <span className='text-white text-bold text-xxs'>
+            Agregar al carrito
+          </span>
         </button>
       </div>
     </section>

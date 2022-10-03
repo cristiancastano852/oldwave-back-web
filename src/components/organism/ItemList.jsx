@@ -32,8 +32,6 @@ export default function ItemList({ query }) {
   }, [itemSelected]);
 
   const componentItems = items.map((item2) => {
-    // eslint-disable-next-line no-console
-    console.log(item2);
     const onReturn = () => {
       setItem(item2);
       setItemSelected(true);

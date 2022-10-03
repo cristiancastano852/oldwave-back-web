@@ -1,5 +1,5 @@
 import Footer from 'components/molecules/Footer';
-import NavBar from 'components/molecules/NavBar';
+import NavBar from 'components/organism/NavBar';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 

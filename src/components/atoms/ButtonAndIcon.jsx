@@ -4,16 +4,17 @@ export default function ButtonAndIcon({
   icon,
   text,
   otherStyles,
+  textStyle,
   responsive,
   onClick,
   urlDocument,
 }) {
-  let responsiveStyle = '';
+  let responsiveStyle = textStyle;
   let stylesCont = otherStyles;
   if (responsive) {
-    responsiveStyle = ' hidden md:inline';
+    responsiveStyle += ' hidden md:inline';
   } else {
-    responsiveStyle = 'inline';
+    responsiveStyle += ' inline';
   }
 
   if (text) {

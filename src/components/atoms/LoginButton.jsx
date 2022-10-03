@@ -7,8 +7,8 @@ export default function LoginButton() {
 
   return (
     <ButtonAndIcon
-      text='Registrarse o iniciar sesión'
-      otherStyles='py-2 px-7 bg-gh-white rounded-2xl hidden lg:block'
+      text='Regístrate o inicia sesión'
+      otherStyles='py-2 px-7 bg-gh-white rounded-2xl hidden md:inline'
       responsive
       onClick={() => {
         loginWithRedirect();

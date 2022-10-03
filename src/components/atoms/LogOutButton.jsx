@@ -8,7 +8,7 @@ export default function LogOutButton() {
   return (
     <ButtonAndIcon
       text='Cerrar sesión'
-      otherStyles='py-2 px-7 bg-gh-white rounded-2xl hidden lg:block'
+      otherStyles='py-2 px-7 bg-gh-white rounded-2xl hidden md:inline'
       responsive
       onClick={() => logout({ returnTo: window.location.origin })}
     />

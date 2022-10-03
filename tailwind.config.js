@@ -20,6 +20,7 @@ module.exports = {
         'footer-gray': '#3B3B3B',
         platinium: '#E2E2E2',
         violet: '#772CE8',
+        'violet-light': '#DCC8F9',
         orange: '#F99C36',
         white: '#ffffff',
         black: '#000000',

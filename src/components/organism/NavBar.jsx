@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
+import {
+  AiOutlineMenu,
+  AiOutlineSearch,
+  AiOutlineShoppingCart,
+} from 'react-icons/ai';
 import { BsPersonCircle } from 'react-icons/bs';
+import { MdClose } from 'react-icons/md';
 import { BiFilterAlt } from 'react-icons/bi';
 import OldwaveLogo from 'assets/logos/oldwave-logo-horizontal.png';
-import CarritoIcon from 'assets/icons/carrito-icon.svg';
 import LoginButton from 'components/atoms/LoginButton';
 import { useAuth0 } from '@auth0/auth0-react';
 import LogOutButton from 'components/atoms/LogOutButton';
+import ButtonAndIcon from 'components/atoms/ButtonAndIcon';
+import DropMenu from 'components/molecules/DropMenu';
+import 'styles/NavBar.css';
 
 export default function NavBar() {
   const { isAuthenticated } = useAuth0();
   const [value, setValue] = useState('');
+  const [navbarOpen, setNavbarOpen] = useState(false);
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -32,13 +41,34 @@ export default function NavBar() {
     navigate('/');
   };
 
+  const handleMenuToggle = () => {
+    setNavbarOpen(!navbarOpen);
+  };
+
+  const handleFilter = () => {
+    setIsFilterMenuOpen(!isFilterMenuOpen);
+  };
+
   return (
     <nav>
+      <div className='absolute top top-12 left-8 z-40'>
+        {navbarOpen ? (
+          <DropMenu toggle={handleMenuToggle} filterHandeler={handleFilter} />
+        ) : null}
+      </div>
       <section className='flex mx-5 mt-5 justify-between md:mx-20'>
         <div className='flex flex-row'>
-          <span className='flex items-center mr-5 md:hidden'>
-            <AiOutlineMenu className='h-6 w-6 text-violet' />
-          </span>
+          <button
+            type='button'
+            className='flex items-center mr-5 md:hidden'
+            onClick={handleMenuToggle}
+          >
+            {navbarOpen ? (
+              <MdClose className='h-5 w-5 text-violet md:hidden' />
+            ) : (
+              <AiOutlineMenu className='h-5 w-5 text-violet md:hidden' />
+            )}
+          </button>
           <span>
             <img
               src={OldwaveLogo}
@@ -54,16 +84,14 @@ export default function NavBar() {
           <span>
             <BsPersonCircle
               alt='login and profile icon'
-              className='h-7 w-7 mx-5 text-violet'
+              className='h-7 w-7 mx-2 text-violet'
             />
           </span>
-          <span>
-            <img
-              src={CarritoIcon}
-              alt='login and profile icon'
-              className='h-8 w-6'
-            />
-          </span>
+          <AiOutlineShoppingCart
+            alt='login and profile icon'
+            className='h-7 w-7 mx-2 text-violet'
+          />
+          <span />
         </div>
       </section>
       <section className='flex items-center justify-center space-x-3 md:justify-start h-16 mt-4 bg-violet'>
@@ -90,14 +118,28 @@ export default function NavBar() {
         >
           Buscar
         </button>
-        <button
-          type='button'
-          className='flex flex-row items-center space-x-1 hidden text-white rounded-2xl border border-white py-2 px-5 lg:block'
-        >
-          <BiFilterAlt className='inline' />
-          <span className='text-white'>Filtros</span>
-        </button>
+        <ButtonAndIcon
+          onClick={handleFilter}
+          icon={<BiFilterAlt className='inline' />}
+          text='Filtros'
+          otherStyles='hidden md:block text-white rounded-2xl border border-white py-2 px-8'
+          textStyle='text-white '
+          responsive
+        />
       </section>
+      {isFilterMenuOpen ? (
+        <section className='flex flex-col md:flex-row md:divide-x'>
+          <div>
+            <h3 className='filters-title'>Categorías sugeridas</h3>
+          </div>
+          <div>
+            <h3 className='filters-title'>Productos sugeridos</h3>
+          </div>
+          <div>
+            <h3 className='filters-title'>Resultados</h3>
+          </div>
+        </section>
+      ) : null}
     </nav>
   );
 }

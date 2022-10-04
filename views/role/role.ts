@@ -8,27 +8,19 @@ const routeRole = express.Router();
 
 routeRole.get("/role/:id", async (req, res) => {
     const id: string = req.params.id as string;
-    let getDetails = await prisma.shoppingCart.findUnique({
+    let getDetails = await prisma.user.findUnique({
       where: {
-        clientId: id,
+        id: id,
       },
       select: {
-        total: true,
-        details: {
+        roleUser: {
           select: {
-            id: true,
-            units: true,
-            cartProduct: {
-              select: {
-                name: true,
-                stock: true,
-                thumbnail: true,
-                value: true,
-              },
-            },
+            isAdmin: true,
           },
         },
       },
     });
     res.json(getDetails);
 });
+
+export default routeRole;

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ItemCard from 'components/molecules/ItemCard';
+import { nanoid } from 'nanoid';
 
 export default function ItemList({ query }) {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ export default function ItemList({ query }) {
   });
 
   const productsBrands = brands.map((brand) => (
-    <div className='flex flex-row items-center'>
+    <div key={nanoid()} className='flex flex-row items-center'>
       <input
         type='checkbox'
         id={brand.name}
@@ -77,7 +78,7 @@ export default function ItemList({ query }) {
   ));
 
   const productsTypes = types.map((type) => (
-    <div className='flex flex-row items-center'>
+    <div key={nanoid()} className='flex flex-row items-center'>
       <input
         type='checkbox'
         id={type.name}
@@ -91,7 +92,7 @@ export default function ItemList({ query }) {
   ));
 
   const productStatus = status.map((status1) => (
-    <div className='flex flex-row items-center'>
+    <div key={nanoid()} className='flex flex-row items-center'>
       <input
         type='checkbox'
         id={status1.name}

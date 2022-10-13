@@ -38,7 +38,7 @@ export default function ButtonAndIcon({
   return (
     <button
       type='button'
-      className={`w-fit flex flex-row items-center justify-center rounded p-2 ${stylesCont}`}
+      className={`w-fit flex flex-row items-center justify-center p-2 ${stylesCont}`}
       onClick={onClick}
     >
       <span className={responsiveStyle}>{text}</span>

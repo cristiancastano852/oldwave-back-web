@@ -90,6 +90,7 @@ export default function Item() {
                 <button
                   className='w-4/5 bg-violet px-2 pb-1 rounded-2xl md:w-1/2'
                   type='button'
+                  // onClick={() => context.addProductToCart(itemToShow)}
                 >
                   <span className='text-white text-bold text-sm md:text-base'>
                     Agregar al carrito

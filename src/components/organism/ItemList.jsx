@@ -59,6 +59,7 @@ export default function ItemList({ query }) {
         stars={item2.rating}
         seller={item2.seller}
         brand={item2.brand}
+        // onAddCart={() => context.addProductToCart(item2)}
       />
     );
   });

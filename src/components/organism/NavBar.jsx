@@ -90,6 +90,7 @@ export default function NavBar() {
           <AiOutlineShoppingCart
             alt='login and profile icon'
             className='h-7 w-7 mx-2 text-violet'
+            onClick={() => navigate('/cart')}
           />
           <span />
         </div>

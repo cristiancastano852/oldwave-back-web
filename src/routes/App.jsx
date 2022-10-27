@@ -4,24 +4,53 @@ import Layout from 'containers/Layout';
 import Home from 'pages/Home';
 import Search from 'pages/Search';
 import Item from 'pages/Item';
-import GlobalState from 'context/GlobalState';
 import Cart from 'pages/Cart';
+import Profile from 'pages/Profile';
+import NotFounded from 'pages/NotFounded';
+import { useUserState } from 'hooks/useUserState';
+import LoginFirst from 'pages/LoginFirst';
+import UserDataNotFounded from 'pages/UserDataNotFounded';
 
 function App() {
-  return (
-    <GlobalState>
-      <BrowserRouter>
-        <Routes>
-          <Route exact path='/' element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path='/search' element={<Search />} />
-            <Route path='/item/:itemId' element={<Item />} />
+  const { isAuthenticated, userCreated } = useUserState();
+
+  const renderRoutes = () => {
+    if (isAuthenticated) {
+      if (userCreated) {
+        return (
+          <>
             <Route path='/cart' element={<Cart />} />
-            <Route path='*' element={<p>There is nothing here: 404!</p>} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </GlobalState>
+            <Route path='/profile' element={<Profile />} />
+          </>
+        );
+      }
+      return (
+        <>
+          <Route path='/cart' element={<UserDataNotFounded />} />
+          <Route path='/profile' element={<UserDataNotFounded />} />
+        </>
+      );
+    }
+    return (
+      <>
+        <Route path='/cart' element={<LoginFirst />} />
+        <Route path='/profile' element={<LoginFirst />} />
+      </>
+    );
+  };
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route exact path='/' element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path='/search' element={<Search />} />
+          <Route path='/item/:itemId' element={<Item />} />
+          {renderRoutes()}
+          <Route path='*' element={<NotFounded />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

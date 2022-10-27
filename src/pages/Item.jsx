@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
@@ -9,7 +9,6 @@ import 'swiper/css/navigation';
 import 'styles/item.css';
 import { nanoid } from 'nanoid';
 import Loading from 'components/atoms/Loading';
-import CartContext from 'context/CartContext';
 
 export default function Item() {
   const [itemToShow, setItemToShow] = useState(null);
@@ -17,8 +16,6 @@ export default function Item() {
   const [pictures, setPictures] = useState([]);
   const { itemId } = useParams();
   const itemIdParsed = itemId.substring(0, 25);
-
-  const context = useContext(CartContext);
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -93,7 +90,7 @@ export default function Item() {
                 <button
                   className='w-4/5 bg-violet px-2 pb-1 rounded-2xl md:w-1/2'
                   type='button'
-                  onClick={() => context.addProductToCart(itemToShow)}
+                  // onClick={() => context.addProductToCart(itemToShow)}
                 >
                   <span className='text-white text-bold text-sm md:text-base'>
                     Agregar al carrito

@@ -1,6 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState, useContext } from 'react';
-import CartContext from 'context/CartContext';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ItemCard from 'components/molecules/ItemCard';
 import { nanoid } from 'nanoid';
@@ -15,8 +14,6 @@ export default function ItemList({ query }) {
   const [brands, setBrands] = useState([]);
   const [types, setTypes] = useState([]);
   const [status, setStatus] = useState([]);
-
-  const context = useContext(CartContext);
 
   useEffect(() => {
     setBrands([{ name: 'nike' }, { name: 'adidas' }, { name: 'puma' }]);
@@ -62,7 +59,7 @@ export default function ItemList({ query }) {
         stars={item2.rating}
         seller={item2.seller}
         brand={item2.brand}
-        onAddCart={() => context.addProductToCart(item2)}
+        // onAddCart={() => context.addProductToCart(item2)}
       />
     );
   });

@@ -7,7 +7,7 @@ import Item from 'pages/Item';
 import Cart from 'pages/Cart';
 import Profile from 'pages/Profile';
 import NotFounded from 'pages/NotFounded';
-import { useUserState } from 'hooks/useUserState';
+import useUserState from 'hooks/useUserState';
 import LoginFirst from 'pages/LoginFirst';
 import UserDataNotFounded from 'pages/UserDataNotFounded';
 

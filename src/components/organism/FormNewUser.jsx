@@ -12,13 +12,17 @@ import {
   Alert,
   IconButton,
   Collapse,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'hooks/useLocalStorage';
-import { useUserState } from 'hooks/useUserState';
+import useUserState from 'hooks/useUserState';
 
-const steps = ['Nombre y edad', 'Sobre ti', 'Tus expectativas', 'Linkedin'];
+const steps = ['Nombre y apellido', 'Documento', 'Nacimiento', 'Contacto'];
 
 export default function FormNewUser() {
   const navigate = useNavigate();
@@ -31,19 +35,23 @@ export default function FormNewUser() {
     [
       {
         name: '',
-        age: '',
-        about: '',
-        expectations: '',
-        linkedin: '',
+        lastName: '',
+        documentType: '',
+        documentNumber: '',
+        birthDate: '',
+        gender: '',
+        phone: '',
       },
     ]
   );
 
-  const fullNameNewUser = useRef();
-  const ageNewUser = useRef();
-  const aboutNewUser = useRef();
-  const expectationsNewUser = useRef();
-  const linkedinNewUser = useRef();
+  const nameNewUser = useRef();
+  const lastNameNewUser = useRef();
+  const documentTypeNewUser = useRef();
+  const documentNumberNewUser = useRef();
+  const birthDateNewUser = useRef();
+  const genderNewUser = useRef();
+  const phoneNewUser = useRef();
 
   function isStepOptional(step) {
     return step === 3;
@@ -67,10 +75,10 @@ export default function FormNewUser() {
 
     switch (activeStep) {
       case 0:
-        if (fullNameNewUser.current.value && ageNewUser.current.value) {
+        if (nameNewUser.current.value && lastNameNewUser.current.value) {
           const newUser = [...userToCreate];
-          newUser[0].name = fullNameNewUser.current.value;
-          newUser[0].age = ageNewUser.current.value;
+          newUser[0].name = nameNewUser.current.value;
+          newUser[0].lastName = lastNameNewUser.current.value;
           saveUserToCreate(newUser);
           next();
         } else {
@@ -79,9 +87,13 @@ export default function FormNewUser() {
         break;
 
       case 1:
-        if (aboutNewUser.current.value) {
+        if (
+          documentTypeNewUser.current.value &&
+          documentNumberNewUser.current.value
+        ) {
           const newUser = [...userToCreate];
-          newUser[0].about = aboutNewUser.current.value;
+          newUser[0].documentType = documentTypeNewUser.current.value;
+          newUser[0].documentNumber = documentNumberNewUser.current.value;
           next();
         } else {
           setShowAlert(true);
@@ -89,9 +101,10 @@ export default function FormNewUser() {
         break;
 
       case 2:
-        if (expectationsNewUser.current.value) {
+        if (birthDateNewUser.current.value && genderNewUser.current.value) {
           const newUser = [...userToCreate];
-          newUser[0].expectations = expectationsNewUser.current.value;
+          newUser[0].birthDate = birthDateNewUser.current.value;
+          newUser[0].gender = genderNewUser.current.value;
           next();
         } else {
           setShowAlert(true);
@@ -99,9 +112,9 @@ export default function FormNewUser() {
         break;
 
       case 3:
-        if (linkedinNewUser.current.value) {
+        if (phoneNewUser.current.value) {
           const newUser = [...userToCreate];
-          newUser[0].linkedin = linkedinNewUser.current.value;
+          newUser[0].phone = phoneNewUser.current.value;
         }
         next();
         handleNewUser();
@@ -146,11 +159,12 @@ export default function FormNewUser() {
         data: {
           userEmail: user.email,
           name: userToCreate[0].name,
-          about: userToCreate[0].about,
-          expectations: userToCreate[0].expectations,
-          linkedin: userToCreate[0].linkedin,
-          age: userToCreate[0].age,
-          avatar: user.picture,
+          lastName: userToCreate[0].lastName,
+          documentType: userToCreate[0].documentType,
+          documentNumber: userToCreate[0].documentNumber,
+          birthDate: userToCreate[0].birthDate,
+          gender: userToCreate[0].gender,
+          phone: userToCreate[0].phone,
         },
       };
 
@@ -174,58 +188,79 @@ export default function FormNewUser() {
             <TextField
               style={{ width: '100%', margin: '10px' }}
               type='text'
-              label='Nombre completo'
+              label='Nombre'
               variant='outlined'
               required
-              inputRef={fullNameNewUser}
+              inputRef={nameNewUser}
             />
             <TextField
               style={{ width: '100%', margin: '10px' }}
-              type='number'
-              label='Edad'
+              type='text'
+              label='Apellido'
               variant='outlined'
               required
-              inputRef={ageNewUser}
+              inputRef={lastNameNewUser}
             />
           </div>
         );
       case 1:
         return (
-          <TextField
-            style={{ width: '100%', margin: '10px' }}
-            type='area'
-            label='Sobre ti'
-            variant='outlined'
-            multiline
-            rows={5}
-            required
-            inputRef={aboutNewUser}
-          />
+          <div>
+            <InputLabel id='demo-simple-select-label'>Age</InputLabel>
+            <Select
+              labelId='demo-simple-select-label'
+              id='demo-simple-select'
+              label='Tipo de documento'
+              inputRef={documentTypeNewUser}
+            >
+              <MenuItem value='CC'>CC</MenuItem>
+              <MenuItem value='TI'>TI</MenuItem>
+              <MenuItem value='CE'>CE</MenuItem>
+            </Select>
+            <TextField
+              style={{ width: '100%', margin: '10px' }}
+              type='number'
+              label='Número de documento'
+              variant='outlined'
+              required
+              inputRef={documentNumberNewUser}
+            />
+          </div>
         );
       case 2:
         return (
-          <TextField
-            style={{ width: '100%', margin: '10px' }}
-            type='area'
-            label='Tus expectativas'
-            variant='outlined'
-            multiline
-            rows={5}
-            required
-            inputRef={expectationsNewUser}
-          />
+          <div>
+            <DesktopDatePicker
+              label='Date desktop'
+              inputFormat='MM/DD/YYYY'
+              renderInput={(params) => <TextField {...params} />}
+              inputRef={birthDateNewUser}
+            />
+            <Select
+              labelId='demo-simple-select-label'
+              id='demo-simple-select'
+              label='Sexo'
+              inputRef={genderNewUser}
+            >
+              <MenuItem value='M'>M</MenuItem>
+              <MenuItem value='F'>F</MenuItem>
+            </Select>
+          </div>
         );
       case 3:
         return (
-          <TextField
-            style={{ width: '100%', margin: '10px' }}
-            type='url'
-            label='Linkedin'
-            variant='outlined'
-            required
-            inputRef={linkedinNewUser}
-          />
+          <div>
+            <TextField
+              style={{ width: '100%', margin: '10px' }}
+              type='number'
+              label='Número de telefono'
+              variant='outlined'
+              required
+              inputRef={phoneNewUser}
+            />
+          </div>
         );
+
       default:
         return 'Unknown step';
     }

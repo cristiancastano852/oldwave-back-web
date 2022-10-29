@@ -9,10 +9,13 @@ import Profile from 'pages/Profile';
 import NotFounded from 'pages/NotFounded';
 import { useUserState } from 'hooks/useUserState';
 import LoginFirst from 'pages/LoginFirst';
-import UserDataNotFounded from 'pages/UserDataNotFounded';
+// import UserDataNotFounded from 'pages/UserDataNotFounded';
+import { useAuth0 } from '@auth0/auth0-react';
+import Loading from 'components/atoms/Loading';
 
 function App() {
   const { isAuthenticated, userCreated } = useUserState();
+  const { isLoading } = useAuth0();
 
   const renderRoutes = () => {
     if (isAuthenticated) {
@@ -26,8 +29,8 @@ function App() {
       }
       return (
         <>
-          <Route path='/cart' element={<UserDataNotFounded />} />
-          <Route path='/profile' element={<UserDataNotFounded />} />
+          <Route path='/cart' element={<Cart />} />
+          <Route path='/profile' element={<Profile />} />
         </>
       );
     }
@@ -38,6 +41,10 @@ function App() {
       </>
     );
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <BrowserRouter>

@@ -10,14 +10,14 @@ import { MdClose } from 'react-icons/md';
 import { BiFilterAlt } from 'react-icons/bi';
 import OldwaveLogo from 'assets/logos/oldwave-logo-horizontal.png';
 import LoginButton from 'components/atoms/LoginButton';
-import { useAuth0 } from '@auth0/auth0-react';
 import LogOutButton from 'components/atoms/LogOutButton';
 import ButtonAndIcon from 'components/atoms/ButtonAndIcon';
 import DropMenu from 'components/molecules/DropMenu';
 import 'styles/NavBar.css';
+import { useUserState } from 'hooks/useUserState';
 
 export default function NavBar() {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useUserState();
   const [value, setValue] = useState('');
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
@@ -80,13 +80,15 @@ export default function NavBar() {
           </span>
         </div>
         <div className='flex flex-row items-center'>
-          {isAuthenticated ? <LogOutButton /> : <LoginButton />}
-          <span>
-            <BsPersonCircle
-              alt='login and profile icon'
-              className='h-7 w-7 mx-2 text-violet'
-            />
-          </span>
+          {isAuthenticated ? <LogOutButton /> : <LoginButton isNavBar />}
+          {isAuthenticated && (
+            <a href='/profile'>
+              <BsPersonCircle
+                alt='login and profile icon'
+                className='h-7 w-7 mx-2 text-violet'
+              />
+            </a>
+          )}
           <AiOutlineShoppingCart
             alt='login and profile icon'
             className='h-7 w-7 mx-2 text-violet'

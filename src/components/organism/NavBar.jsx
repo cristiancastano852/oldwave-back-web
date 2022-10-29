@@ -14,10 +14,10 @@ import LogOutButton from 'components/atoms/LogOutButton';
 import ButtonAndIcon from 'components/atoms/ButtonAndIcon';
 import DropMenu from 'components/molecules/DropMenu';
 import 'styles/NavBar.css';
-import useUserState from 'hooks/useUserState';
+import { useUserState } from 'hooks/useUserState';
 
 export default function NavBar() {
-  const { isAuthenticated, userCreated } = useUserState();
+  const { isAuthenticated } = useUserState();
   const [value, setValue] = useState('');
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
@@ -81,7 +81,7 @@ export default function NavBar() {
         </div>
         <div className='flex flex-row items-center'>
           {isAuthenticated ? <LogOutButton /> : <LoginButton isNavBar />}
-          {userCreated && (
+          {isAuthenticated && (
             <a href='/profile'>
               <BsPersonCircle
                 alt='login and profile icon'

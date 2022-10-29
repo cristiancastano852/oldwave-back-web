@@ -22,7 +22,9 @@ export default function ItemList({ query }) {
 
     const fetchItems = async () => {
       await axios
-        .get(`https://asac-back-dev.azurewebsites.net/products?search=${query}`)
+        .get(
+          `https://asac-back-prod.azurewebsites.net/products?search=${query}`
+        )
         .then(({ data }) => {
           setItems(data.products);
         })

@@ -19,7 +19,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'hooks/useLocalStorage';
-import useUserState from 'hooks/useUserState';
+import { useUserState } from 'hooks/useUserState';
 
 const steps = ['Nombre y apellido', 'Documento', 'Nacimiento', 'Contacto'];
 
@@ -28,9 +28,9 @@ export default function FormNewUser() {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [showAlert, setShowAlert] = useState(false);
-  const { user, handleUserCreated } = useUserState();
+  const { user, handleUserCreated, createClient } = useUserState();
   const { item: userToCreate, saveItem: saveUserToCreate } = useLocalStorage(
-    'USER_V1',
+    'USER_OW_V1',
     [
       {
         name: '',
@@ -152,32 +152,34 @@ export default function FormNewUser() {
     const createNewUser = async () => {
       const options = {
         method: 'POST',
-        url: 'https://asac-back-dev.azurewebsites.net/user',
+        url: 'https://asac-back-prod.azurewebsites.net/user',
         headers: { 'Content-Type': 'application/json' },
         data: {
           name: userToCreate[0].name,
           lastName: userToCreate[0].lastName,
           documentType: userToCreate[0].documentType,
           documentNumber: userToCreate[0].documentNumber,
-          birthDate: userToCreate[0].birthDate,
+          birthDate: `${userToCreate[0].birthDate}T00:00:00.001Z`,
           gender: userToCreate[0].gender,
           phone: userToCreate[0].phone,
           email: user.email,
           cityId: 'cl6fwsszo0153x0rn53z8mtpc',
+          address: 'cl6fx8tbj01151ornzqb9xss5',
         },
       };
 
       await axios
         .request(options)
         .then((response) => {
-          console.log(response.data);
-          handleUserCreated(response.data.userId);
+          console.log(response);
+          handleUserCreated(response.data.id);
         })
         .catch((error) => {
           console.error(error);
         });
     };
     createNewUser();
+    createClient();
   };
 
   const getStepComponent = (step) => {

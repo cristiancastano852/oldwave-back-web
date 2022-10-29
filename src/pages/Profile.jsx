@@ -1,60 +1,65 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import Loading from 'components/atoms/Loading';
 import FormNewUser from 'components/organism/FormNewUser';
-import useUserState from 'hooks/useUserState';
+import { useUserState } from 'hooks/useUserState';
 
 export default function UserProfile() {
-  const [userDB, setUserDB] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const { user, creatingUser, userCreated, isAuthenticated } = useUserState();
+  const { user, creatingUser, userId, loading } = useUserState();
   const [orders, setOrders] = useState([]);
 
-  const ordersUser = [
-    {
-      id: 1,
-      date: '2021-05-31',
-      total: 100000,
-      trackNumber: '123456789',
-      deliveryStatus: 'Enviado',
-    },
-    {
-      id: 2,
-      date: '2021-05-21',
-      total: 200000,
-      trackNumber: '123456790',
-      deliveryStatus: 'Entregado',
-    },
-    {
-      id: 3,
-      date: '2021-05-01',
-      total: 300000,
-      trackNumber: '123456791',
-      deliveryStatus: 'Entregado',
-    },
-  ];
+  // const ordersUser = [
+  //   {
+  //     id: 1,
+  //     date: '2021-05-31',
+  //     total: 100000,
+  //     trackNumber: '123456789',
+  //     deliveryStatus: 'Enviado',
+  //   },
+  //   {
+  //     id: 2,
+  //     date: '2021-05-21',
+  //     total: 200000,
+  //     trackNumber: '123456790',
+  //     deliveryStatus: 'Entregado',
+  //   },
+  //   {
+  //     id: 3,
+  //     date: '2021-05-01',
+  //     total: 300000,
+  //     trackNumber: '123456791',
+  //     deliveryStatus: 'Entregado',
+  //   },
+  // ];
 
   useEffect(() => {
-    // orders
     const fetchUserData = async () => {
-      setUserDB(user);
-      setOrders(ordersUser);
-      // handleCreatingUser();
-      //   setIsLoading(true);
-      //   if (userId) {
-      //     const res = await axios.get(
-      //       `https://udea-open-door-back-git-develop-cristiancastano852.vercel.app/userProfile/${userId}`
-      //     );
-      //     setUserDB(res.data.user);
-      //   }
-    };
-    if (isAuthenticated && userCreated) {
-      fetchUserData();
-    }
-    setIsLoading(false);
-  }, []);
+      setIsLoading(true);
+      const options = {
+        method: 'GET',
+        url: `https://asac-back-prod.azurewebsites.net/order/${userId}`,
+      };
 
-  if (isLoading) {
+      await axios
+        .request(options)
+        .then((response) => {
+          if (response.data?.length > 0) {
+            console.log(response);
+            setOrders(response.data);
+          }
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+    fetchUserData();
+    setIsLoading(false);
+  }, [userId]);
+
+  if (isLoading || loading) {
     return <Loading />;
   }
 
@@ -75,7 +80,7 @@ export default function UserProfile() {
     minimumFractionDigits: 0,
   });
 
-  const ordersComponent = orders.map((order) => (
+  const ordersComponent = orders?.map((order) => (
     <section
       className='flex items-center p-2 rounded hover:bg-cult-white'
       key={order.id}
@@ -84,7 +89,7 @@ export default function UserProfile() {
         <p className='md:text-md font-medium break-all'>
           Guía: {order.trackNumber}
         </p>
-        <p className='text-sm font-light text-gray-400'>{order.date}</p>
+        <p className='text-sm font-light text-gray-400'>{order.shipmentDate}</p>
       </div>
 
       <div className='flex flex-col text-center space-y-2 ml-auto'>
@@ -108,13 +113,19 @@ export default function UserProfile() {
           alt='Foto personal'
         />
         <h2 className='w-3/4 text-center text-lg p-2 font-semibold md:p-4 md:text-start'>
-          {userDB.nickname}
+          {user.nickname}
         </h2>
       </picture>
       <section className='w-full flex flex-col mt-10 space-y-5 md:items-start'>
         <h2 className='text-lg text-center font-bold'>Mis pedidos</h2>
         <div className='flex w-full flex-col mt-10 space-y-3'>
-          {ordersComponent}
+          {orders.length > 0 ? (
+            ordersComponent
+          ) : (
+            <p className='text-center text-lg font-semibold'>
+              No tienes pedidos
+            </p>
+          )}
         </div>
       </section>
     </section>

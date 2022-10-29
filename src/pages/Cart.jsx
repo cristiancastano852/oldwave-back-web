@@ -3,6 +3,8 @@ import { BsTrash, BsPlusLg } from 'react-icons/bs';
 import { AiOutlineMinus } from 'react-icons/ai';
 import ButtonAndIcon from 'components/atoms/ButtonAndIcon';
 import useCartState from 'hooks/useCartState';
+import Loading from 'components/atoms/Loading';
+import { useUserState } from 'hooks/useUserState';
 
 export default function Cart() {
   const {
@@ -12,7 +14,11 @@ export default function Cart() {
     addProduct,
     removeProduct,
     emptyCart,
+    loadingCart,
+    processOrder,
   } = useCartState();
+
+  const { loading } = useUserState();
 
   const formatterPeso = new Intl.NumberFormat('es-CO', {
     style: 'currency',
@@ -23,14 +29,18 @@ export default function Cart() {
   const productsInCart = products.map((product) => (
     <div className='flex items-center' key={product.id}>
       <img
-        src={product.thumbnail}
+        src={product.cartProduct.thumbnail}
         className='rounded-full w-16 h-16'
-        alt={product.name}
+        alt={product.cartProduct.name}
       />
 
       <div className='flex flex-col ml-3'>
-        <p className='md:text-md font-medium break-all'>{product.name}</p>
-        <p className='text-sm font-light text-gray-400'>{product.brand}</p>
+        <p className='md:text-md font-medium break-all'>
+          {product.cartProduct.name}
+        </p>
+        <p className='text-sm font-light text-gray-400'>
+          {product.cartProduct.brand ? product.cartProduct.name : 'Lujo'}
+        </p>
       </div>
 
       <div className='hidden flex justify-center align-center space-x-2 md:block md:ml-auto'>
@@ -62,7 +72,7 @@ export default function Cart() {
 
       <div className='flex flex-col text-center space-y-2 ml-auto md:ml-5'>
         <span className='text-base md:text-md font-medium'>
-          {formatterPeso.format(product.value)}
+          {formatterPeso.format(product.cartProduct.value)}
         </span>
         <span className='text-sm font-light text-gray-400'>
           Cantidad: {product.units}
@@ -81,6 +91,10 @@ export default function Cart() {
       </div>
     </div>
   ));
+
+  if (loadingCart || loading) {
+    return <Loading />;
+  }
 
   return (
     <div className='flex flex-col justify-center pt-10 pb-20 px-5 md:px-20'>
@@ -103,6 +117,7 @@ export default function Cart() {
               text='Realizar pago'
               otherStyles='bg-violet rounded-2xl border border-white py-2 px-8'
               textStyle='text-white'
+              onClick={() => processOrder()}
             />
             <ButtonAndIcon
               text='Vaciar carro'

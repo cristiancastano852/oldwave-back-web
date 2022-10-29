@@ -1,46 +1,77 @@
 /* eslint-disable no-console */
-import { useReducer, useEffect } from 'react';
-import useUserState from 'hooks/useUserState';
+import { useReducer, useEffect, useState } from 'react';
+import axios from 'axios';
+import { useUserState } from 'hooks/useUserState';
 
 export default function useCartState() {
   const [state, dispatch] = useReducer(cartReducer, initialState);
   const { userId } = useUserState();
   const { products, totalProducts, totalPrice } = state;
+  const [cartLoading, setCartLoading] = useState(false);
 
-  const cartFromDatabase = {
-    products: [
-      {
-        id: 1,
-        thumbnail: 'https://i.imgur.com/3s7nm2v.jpg',
-        name: 'T-shirt',
-        brand: 'Nike',
-        value: '100000',
-        units: '2',
-        subtotal: '200000',
-      },
-      {
-        id: 2,
-        thumbnail: 'https://i.imgur.com/3s7nm2v.jpg',
-        name: 'Pant',
-        brand: 'Nike',
-        value: '150000',
-        units: '1',
-        subtotal: '150000',
-      },
-    ],
-    totalProducts: 3,
-    totalPrice: 350000,
-  };
+  // const cartFromDatabase = {
+  //   products: [
+  //     {
+  //       id: 1,
+  //       thumbnail: 'https://i.imgur.com/3s7nm2v.jpg',
+  //       name: 'T-shirt',
+  //       brand: 'Nike',
+  //       value: '100000',
+  //       units: '2',
+  //       subtotal: '200000',
+  //     },
+  //     {
+  //       id: 2,
+  //       thumbnail: 'https://i.imgur.com/3s7nm2v.jpg',
+  //       name: 'Pant',
+  //       brand: 'Nike',
+  //       value: '150000',
+  //       units: '1',
+  //       subtotal: '150000',
+  //     },
+  //   ],
+  //   totalProducts: 3,
+  //   totalPrice: 350000,
+  // };
 
   useEffect(() => {
-    dispatch({
-      type: 'UPDATE_CART',
-      payload: {
-        products: cartFromDatabase.products,
-        totalProd: cartFromDatabase.totalProducts,
-        totalPrice: cartFromDatabase.totalPrice,
-      },
-    });
+    const fetchCartData = async () => {
+      setCartLoading(true);
+      const options = {
+        method: 'GET',
+        // url: `https://asac-back-prod.azurewebsites.net/cart/${userId}`,
+        url: `https://asac-back-prod.azurewebsites.net/cart/cl6fx60q200451ornsr944ty4`,
+      };
+
+      await axios
+        .request(options)
+        .then((response) => {
+          console.log(response.data.client.shoppingCart.details);
+          dispatch({
+            type: 'UPDATE_CART',
+            payload: {
+              products: response.data.client.shoppingCart.details,
+              totalProd: '7',
+              totalPrice: '1000000',
+            },
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      // dispatch({
+      //   type: 'UPDATE_CART',
+      //   payload: {
+      //     products: cartFromDatabase.products,
+      //     totalProd: cartFromDatabase.totalProducts,
+      //     totalPrice: cartFromDatabase.totalPrice,
+      //   },
+      // });
+    };
+
+    fetchCartData();
+    setCartLoading(false);
   }, [userId]);
 
   const addProduct = ({ product }) => {
@@ -60,6 +91,10 @@ export default function useCartState() {
     dispatch({ type: 'EMPTY_CART' });
   };
 
+  const processOrder = () => {
+    // send the order to the database
+  };
+
   return {
     products,
     totalProducts,
@@ -67,6 +102,8 @@ export default function useCartState() {
     addProduct,
     removeProduct,
     emptyCart,
+    cartLoading,
+    processOrder,
   };
 }
 

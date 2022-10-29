@@ -21,7 +21,9 @@ export default function Item() {
     const fetchItem = async () => {
       setLoading(true);
       axios
-        .get(`https://asac-back-dev.azurewebsites.net/products/${itemIdParsed}`)
+        .get(
+          `https://asac-back-prod.azurewebsites.net/products/${itemIdParsed}`
+        )
         .then(({ data }) => {
           setItemToShow(data);
           setPictures(data.images);

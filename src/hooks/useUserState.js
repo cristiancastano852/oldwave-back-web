@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 import { useReducer, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-// import axios from 'axios';
+import axios from 'axios';
 
 function useUserState() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -10,25 +11,36 @@ function useUserState() {
 
   useEffect(() => {
     const fetchUserId = async () => {
-      //   const {data} = await axios.get(
-      //     'https://udea-open-door-back-git-develop-cristiancastano852.vercel.app/getRole',
-      //     {
-      //       headers: { email: user.email },
-      //     }
-      //   );
-      const data = {
-        clientId: 'cl6fyaamz04371ornwyiur8oo',
-        userId: 'cl6fx60q200451ornsr944ty4',
-        isAdmin: 'false',
-      };
+      const res = await axios.get(
+        'https://asac-back-prod.azurewebsites.net/user',
+        {
+          headers: { email: user.email },
+        }
+      );
 
-      if (data.isAdmin === 'true') {
-        setUserIdAndRole({ role: 'admin', id: data.userId });
-      } else if (data.isAdmin === 'false') {
-        setUserIdAndRole({ role: 'user', id: data.clientId });
-      } else {
-        handleCreatingUser();
-      }
+      console.log(res);
+      // const options = {
+      //   method: 'GET',
+      //   url: `https://asac-back-prod.azurewebsites.net/user`,
+      //   headers: { email: user.email },
+      // };
+
+      // await axios
+      //   .request(options)
+      //   .then(({ data }) => {
+      //     console.log(data);
+      //     const { isAdmin } = data;
+      //     if (isAdmin === 'true') {
+      //       setUserIdAndRole({ role: 'admin', id: data.userId });
+      //     } else if (isAdmin === 'false') {
+      //       setUserIdAndRole({ role: 'user', id: data.clientId });
+      //     } else {
+      //       handleCreatingUser();
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //   });
     };
 
     if (isAuthenticated) {

@@ -17,7 +17,6 @@ import {
   MenuItem,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import useUserState from 'hooks/useUserState';
@@ -54,7 +53,7 @@ export default function FormNewUser() {
   const phoneNewUser = useRef();
 
   function isStepOptional(step) {
-    return step === 3;
+    return step === 9999;
   }
 
   function isStepSkipped(step) {
@@ -115,9 +114,11 @@ export default function FormNewUser() {
         if (phoneNewUser.current.value) {
           const newUser = [...userToCreate];
           newUser[0].phone = phoneNewUser.current.value;
+          next();
+          handleNewUser();
+        } else {
+          setShowAlert(true);
         }
-        next();
-        handleNewUser();
         break;
 
       default:
@@ -140,24 +141,20 @@ export default function FormNewUser() {
     });
   };
 
-  const coursesRedirection = () => {
-    navigate('/courses');
-    window.location.reload();
-  };
-
   const profileRedirection = () => {
     navigate('/profile');
     window.location.reload();
   };
 
   const handleNewUser = () => {
+    console.log(userToCreate[0], user.email);
+
     const createNewUser = async () => {
       const options = {
         method: 'POST',
-        url: 'https://udea-open-door-back-git-develop-cristiancastano852.vercel.app/createUser',
+        url: 'https://asac-back-dev.azurewebsites.net/user',
         headers: { 'Content-Type': 'application/json' },
         data: {
-          userEmail: user.email,
           name: userToCreate[0].name,
           lastName: userToCreate[0].lastName,
           documentType: userToCreate[0].documentType,
@@ -165,12 +162,15 @@ export default function FormNewUser() {
           birthDate: userToCreate[0].birthDate,
           gender: userToCreate[0].gender,
           phone: userToCreate[0].phone,
+          email: user.email,
+          cityId: 'cl6fwsszo0153x0rn53z8mtpc',
         },
       };
 
       await axios
         .request(options)
         .then((response) => {
+          console.log(response.data);
           handleUserCreated(response.data.userId);
         })
         .catch((error) => {
@@ -184,7 +184,7 @@ export default function FormNewUser() {
     switch (step) {
       case 0:
         return (
-          <div>
+          <>
             <TextField
               style={{ width: '100%', margin: '10px' }}
               type='text'
@@ -201,17 +201,18 @@ export default function FormNewUser() {
               required
               inputRef={lastNameNewUser}
             />
-          </div>
+          </>
         );
       case 1:
         return (
-          <div>
-            <InputLabel id='demo-simple-select-label'>Age</InputLabel>
+          <>
+            <InputLabel id='select-doctype'>Tipo de documento</InputLabel>
             <Select
-              labelId='demo-simple-select-label'
-              id='demo-simple-select'
-              label='Tipo de documento'
+              style={{ width: '100%', margin: '10px' }}
+              labelId='select-doctype'
+              id='select-doctype'
               inputRef={documentTypeNewUser}
+              defaultValue='CC'
             >
               <MenuItem value='CC'>CC</MenuItem>
               <MenuItem value='TI'>TI</MenuItem>
@@ -225,40 +226,44 @@ export default function FormNewUser() {
               required
               inputRef={documentNumberNewUser}
             />
-          </div>
+          </>
         );
       case 2:
         return (
-          <div>
-            <DesktopDatePicker
-              label='Date desktop'
-              inputFormat='MM/DD/YYYY'
-              renderInput={(params) => <TextField {...params} />}
+          <>
+            <InputLabel id='SomeDate'>Fecha de nacimiento</InputLabel>
+            <TextField
+              name='someDate'
+              InputLabelProps={{ shrink: true, required: true }}
+              style={{ width: '100%', margin: '10px' }}
+              type='date'
+              defaultValue='2000-01-01'
               inputRef={birthDateNewUser}
             />
+            <InputLabel id='select-sex'>Sexo</InputLabel>
             <Select
-              labelId='demo-simple-select-label'
-              id='demo-simple-select'
+              labelId='select-sex'
+              style={{ width: '100%', margin: '10px', marginTop: '15px' }}
+              id='select-sex'
               label='Sexo'
               inputRef={genderNewUser}
+              defaultValue=''
             >
               <MenuItem value='M'>M</MenuItem>
               <MenuItem value='F'>F</MenuItem>
             </Select>
-          </div>
+          </>
         );
       case 3:
         return (
-          <div>
-            <TextField
-              style={{ width: '100%', margin: '10px' }}
-              type='number'
-              label='Número de telefono'
-              variant='outlined'
-              required
-              inputRef={phoneNewUser}
-            />
-          </div>
+          <TextField
+            style={{ width: '100%', margin: '10px' }}
+            type='number'
+            label='Número de telefono'
+            variant='outlined'
+            required
+            inputRef={phoneNewUser}
+          />
         );
 
       default:
@@ -318,12 +323,11 @@ export default function FormNewUser() {
           <Typography sx={{ mt: 2, mb: 1 }}>
             Haz creado con éxito tu perfil
           </Typography>
-          <Button onClick={coursesRedirection}>Ir a Cursos</Button>
-          <Button onClick={profileRedirection}>Ir a Perfil</Button>
+          <Button onClick={profileRedirection}>Ir a perfil</Button>
         </>
       ) : (
         <>
-          {getStepComponent(activeStep)}
+          <div className='py-5'>{getStepComponent(activeStep)}</div>
           {showAlert ? handleAlert() : null}
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />

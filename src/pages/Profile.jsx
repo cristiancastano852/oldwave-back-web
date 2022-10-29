@@ -7,7 +7,7 @@ import useUserState from 'hooks/useUserState';
 export default function UserProfile() {
   const [userDB, setUserDB] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const { user, creatingUser } = useUserState();
+  const { user, creatingUser, userCreated, isAuthenticated } = useUserState();
   const [orders, setOrders] = useState([]);
 
   const ordersUser = [
@@ -35,6 +35,7 @@ export default function UserProfile() {
   ];
 
   useEffect(() => {
+    // orders
     const fetchUserData = async () => {
       setUserDB(user);
       setOrders(ordersUser);
@@ -47,7 +48,9 @@ export default function UserProfile() {
       //     setUserDB(res.data.user);
       //   }
     };
-    fetchUserData();
+    if (isAuthenticated && userCreated) {
+      fetchUserData();
+    }
     setIsLoading(false);
   }, []);
 

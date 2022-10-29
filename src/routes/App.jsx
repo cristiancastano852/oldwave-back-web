@@ -27,7 +27,7 @@ function App() {
       return (
         <>
           <Route path='/cart' element={<UserDataNotFounded />} />
-          <Route path='/profile' element={<UserDataNotFounded />} />
+          <Route path='/profile' element={<Profile />} />
         </>
       );
     }

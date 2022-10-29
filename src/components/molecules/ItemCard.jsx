@@ -20,9 +20,9 @@ export default function ItemCard({
   });
 
   return (
-    <section className='relative flex flex-col w-48 h-96 bg-cult-white rounded-lg border border-platinium'>
+    <section className='relative flex flex-col w-48 h-96 flex-shrink-0 bg-cult-white rounded-lg border border-platinium'>
       <section className='flex flex-col' onClick={onReturn} aria-hidden='true'>
-        <img className='w-48 h-48' src={img} alt={name} />
+        <img className=' object-contain w-48 h-48' src={img} alt={name} />
         <div
           className='flex flex-col items-center justify-center w-full h-1/5'
           onClick={onReturn}
